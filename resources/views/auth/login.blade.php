@@ -67,8 +67,14 @@
                         <hr>
                         <div class="col-12 d-flex justify-content-center">
                             <div class="d-flex flex-column">
-                                <a href="{{route('login.github')}}" class="btn btn-dark mb-1">Login with Github</a>
-                                <a href="{{route('login.google') }}" class="btn btn-danger mb-1">Login with Google</a>
+                                <a href="{{route('login.github')}}" class="btn btn-dark mb-1 fs-16 p-2">
+                                    Login with Github
+                                    <i class="fa-brands fa-github pl-2"></i>
+                                </a>
+                                <a href="{{route('login.google') }}" class="btn btn-danger mb-1 fs-16 p-2">
+                                    Login with Google
+                                    <i class="fa-brands fa-google pl-2"></i>
+                                </a>
 {{--                                <a href="{{route('login.facebook')}}" class="btn btn-info">Login with Facebook</a>--}}
                             </div>
                         </div>
