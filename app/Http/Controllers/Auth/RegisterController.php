@@ -3,10 +3,16 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendWelcomeEmail;
+use App\Mail\RegisterEmail;
+use App\Mail\SendEmail;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Mockery\Exception;
 
 class RegisterController extends Controller
 {
@@ -63,10 +69,20 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        DB::beginTransaction();
+        try {
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+            ]);
+            $emailJob = new SendWelcomeEmail($user->email);
+            dispatch($emailJob);
+            DB::commit();
+            return $user;
+        } catch (Exception $e) {
+            dd($e->getMessage());
+            DB::rollBack();
+        }
     }
 }
